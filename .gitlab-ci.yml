@@ -1,0 +1,27 @@
+# Define base images
+.docker:
+  image: docker:latest
+  services:
+    - docker:${DOCKER_VERSION}-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
+    DOCKER_VERSION: "27.2.0"
+
+.dagger:
+  extends: [.docker]
+  before_script:
+    - apk add curl
+    - curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh
+      # checkout ref name, as gitlab per default checks out with a detached head
+    - git checkout "$CI_COMMIT_REF_NAME"
+    - dagger version
+
+default:
+  tags:
+    - dagger
+
+demo:
+  extends: [.dagger]
+  script: dagger call go-build --source .dagger/
