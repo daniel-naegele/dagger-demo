@@ -25,12 +25,8 @@ func (m *Demo) GoBuild(ctx context.Context,
 	// +defaultPath="src/"
 	source *dagger.Directory,
 ) *dagger.File {
-	const binaryPath = "/work/out/binary"
 
-	buildContainer := getBuildContainer(ctx, source).
-		WithExec([]string{"go", "build", "-o", binaryPath})
-
-	return buildContainer.File(binaryPath)
+	return dag.Go().WithSource(source).Build()
 }
 
 func getBuildContainer(ctx context.Context, source *dagger.Directory) *dagger.Container {
