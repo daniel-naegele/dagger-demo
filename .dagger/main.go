@@ -28,15 +28,3 @@ func (m *Demo) GoBuild(ctx context.Context,
 
 	return dag.Go().WithSource(source).Build()
 }
-
-func getBuildContainer(ctx context.Context, source *dagger.Directory) *dagger.Container {
-	buildContainer := dag.Container().
-		From("golang:1.24.4").
-		WithMountedDirectory("/work", source).
-		WithWorkdir("/work")
-	goModContents, err := buildContainer.File("go.mod").Contents(ctx)
-	if goModContents != "" && err == nil {
-		buildContainer = buildContainer.WithExec([]string{"go", "mod", "download"})
-	}
-	return buildContainer.WithExec([]string{"rm", "-rf", "/root/.cache/go-build"})
-}

@@ -14,8 +14,6 @@
   before_script:
     - apk add curl
     - curl -fsSL https://dl.dagger.io/dagger/install.sh | BIN_DIR=/usr/local/bin sh
-      # checkout ref name, as gitlab per default checks out with a detached head
-    - git checkout "$CI_COMMIT_REF_NAME"
     - dagger version
 
 default:
