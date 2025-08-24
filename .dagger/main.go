@@ -22,7 +22,7 @@ import (
 type Demo struct{}
 
 func (m *Demo) GoBuild(ctx context.Context,
-	// +defaultPath="src/"
+	// +defaultPath="./src"
 	source *dagger.Directory,
 ) *dagger.File {
 
