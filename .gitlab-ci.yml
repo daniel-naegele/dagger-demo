@@ -22,4 +22,4 @@ default:
 
 demo:
   extends: [.dagger]
-  script: dagger call go-build --source .dagger/
+  script: dagger call go-build
